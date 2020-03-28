@@ -1,11 +1,12 @@
 # Shockley Queisser limit : 
-## Theoretical Solar Cell Efficiencies calculator and visualizer
+## Theoretical Dye-sensitized Solar Cell Efficiency calculator and visualizer
 
-It calculates the theoretical solar cell parameters with options to change temperature, light intensity, and radiative efficiency, provides visualization tools. 
+It calculates the theoretical dye-sensitized solar cell parameters with options to change temperature, light intensity, and radiative efficiency, provides visualization tools in python and MS Excel. 
 
-The calculation is based on the radiative limit or the Shockley Queisser limit
+The calculation is based on the radiative limit or the Shockley Queisser limit as described here [Wikipedia: Shockley–Queisser limit] (https://en.wikipedia.org/wiki/Shockley–Queisser_limit); however, we modified the calculation to estimate the theoretical efficiency limit of dye-sensitized solar cells.
 
-[Wikipedia: Shockley–Queisser limit] (https://en.wikipedia.org/wiki/Shockley–Queisser_limit)
+This python script and the MS Excel sheet are based on the work by [C. Marcus Chuang](https://github.com/picklu/Shockley-Queisser-limit)
+
 
 
 #  Example Outputs
@@ -50,7 +51,6 @@ FF  = 88.88      %
 PCE = 33.703     %
 """
 ```
-
 
 
 ## Plot other characteristics
@@ -116,51 +116,6 @@ This is the similar to the one above but without the break down of energy loss.
 <img src="/ExampleOutputFig/E_avail_1pt337eV.png" width="800">
 
   
-    
-      
-## Multi-junction solar cells
-
-The theoretical efficiencies of multijunction solar cells can be higher than single junction solar cells. The method `SQ.available_E` can actually take a list of different bandgaps and calculate the maximum possible efficiencies by using materials with these bandgaps. 
-
-**Note** : In this calculation, we ignore the fact that the bottom cells (lower bandgaps) could absorb the 'excess' emission from the top cells (higher bandgaps)--when the top cells are operated at their maximum power point with finite voltage, there would be some excess emission. This phenomenon has a very minor effect on the calculated efficiencies for multi-junction cells.
-
-### Two bandgaps: 1.1 eV and 1.8 eV
-```python
-SQ.available_E(Egs=[1.1, 1.8])
-```
-The sum of the two sub-cells are higher than any single-junction solar cells.
-<img src="/ExampleOutputFig/E_avail_2cells.png" width="800">
-
-### Three bandgaps: 0.95 eV, 1.37 eV, 1.90 eV
-
-```python
-SQ.available_E(Egs=[0.95, 1.37, 1.90])
-```
-The sum of the efficiency are even higher.
-<img src="/ExampleOutputFig/E_avail_3cells.png" width="800">
-
-
-### Three bandgaps: Ge(0.65 eV), InGaAs (1.40 eV), InGaP (1.86 eV)
-
-####  This bandgap-material combination is the example you can find on [Wikipedia's Multi-Junction Solar Cell] (https://en.wikipedia.org/wiki/Multi-junction_solar_cell) page
-
-<img src="/ExampleOutputFig/E_avail_3cells_InGaP_InGaAs_Ge.png" width="800">
-
-## Efficiency Limit: "Infinite" number of junctions
-
-The theoretical limit for tandem cells with a infinite number of junctions is about ~68%. (This number may be derived analytically, see [Wikipedia's page] (https://en.wikipedia.org/wiki/Multi-junction_solar_cell#Theoretical_Limiting_Efficiency) and the references therein.) But we can also use this `SQ.available_E()`method to numerically approximate it. And we don't actually need an "infinite" amount of junctions. 50 junctions is close enough to get the job done:
-
-```python
-# 50 subcells, 0.496 eV (2500nm) to 4.2 eV with equal energy spacing
-SQ.available_E(np.linspace(0.496, 4.2, 50), legend=False) 
-```
-### A hypothetical multi-junction solar cell consisting of 50 sub-cells
-
-Its overall power conversion efficiency is 67.1% 
-
-<img src="/ExampleOutputFig/MJ496to4200meV_50J.png" width="800">
-
-
 #
 #
 #
