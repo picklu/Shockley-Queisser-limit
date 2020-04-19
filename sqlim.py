@@ -95,8 +95,7 @@ class SQlim:
         phi is the black body radiation at T (flux vs energy)
 
         '''
-        phi = 2 * np.pi * (((self.Es*eV)**2) * eV / ((h**3) * (c**2)) / (
-                           np.exp(self.Es*eV / (k*self.T)) - 1))
+        phi = self.__phi(self.T)
 
         # fluxcumm = sp.integrate.cumtrapz(phi[::-1], self.Es[::-1], initial=0)
         fluxcumm = cumtrapz(phi[::-1], self.Es[::-1], initial=0)
@@ -121,6 +120,13 @@ class SQlim:
             PCE[i] = -1 * np.min(J*V) / self.intensity
         PCE[-1] = 0 # so that np.argmax returns the index of maximum value correctly
         return PCE
+    
+    def __phi(self, temperature):
+        """
+        Returns photon flux irradiated from a black-body at temperature in K
+        """
+        return 2 * np.pi * (((self.Es*eV)**2) * eV / ((h**3) * (c**2)) / (
+                           np.exp(self.Es*eV / (k*temperature)) - 1))
 
     def simulate_JV(self, Eg, plot_dark=False, plot=True, paras=False, Vstep=0.001, Vmin=-0.5):
         """
@@ -203,11 +209,12 @@ class SQlim:
         """
         pass
     
-    def plot_AM15flux(self):
+    def plot_AM15flux(self, temperature=5800, offset=5e4):
         """
         plot AM15flux vs Es
         """
         plt.plot(self.Es, self.AM15flux)
+        plt.plot(self.Es, self.__phi(temperature)/offset)
         plt.xlabel("Energy (eV)", size=20)
         plt.ylabel("$\phi$ (m$^{-2}$ eV$^{-1}$ s$^{-1}$)", size=20)
         plt.show()
