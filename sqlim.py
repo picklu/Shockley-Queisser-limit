@@ -249,7 +249,7 @@ class SQlim:
 
         return
 
-    def plotall(self, Eg, xlims=(0.32, 3.0)):
+    def plotall(self, Eg, xlims=(0.32, 4.0)):
         """
         plot Voc, Jsc, FF, and PCE in a figure with 4 subplots
         """
@@ -271,13 +271,13 @@ class SQlim:
             )
             ax[axs[i]].plot(
                 Eg, ys[i][Eg_idx], "go", 
-                markersize=7, markeredgewidth=2, fillstyle='none'
+                markersize=5, markeredgewidth=2
             )
             ax[axs[i]].set_ylabel(ylabel[i])
             plt.setp(ax[axs[i]].get_xticklabels(), visible=True)
             ax[axs[i]].set_xlabel("Bandgap (eV)")
             ax[axs[i]].tick_params(labelsize=12)
-        ax[(0, 0)].set_xlim(xlims)
+        #ax[(0, 0)].set_xlim(xlims)
         plt.tight_layout()
         plt.show()
         return
