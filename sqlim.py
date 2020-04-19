@@ -213,8 +213,8 @@ class SQlim:
         """
         plot AM15flux vs Es
         """
-        plt.plot(self.Es, self.AM15flux)
-        plt.plot(self.Es, self.__phi(temperature)/offset)
+        plt.plot(self.Es, self.AM15flux, 'r-')
+        plt.plot(self.Es, self.__phi(temperature)/offset, 'm-')
         plt.xlabel("Energy (eV)", size=20)
         plt.ylabel("$\phi$ (m$^{-2}$ eV$^{-1}$ s$^{-1}$)", size=20)
         plt.show()
