@@ -209,7 +209,7 @@ class SQlim:
         """
         plt.plot(self.Es, self.AM15flux)
         plt.xlabel("Energy (eV)", size=20)
-        plt.ylabel("AM1.5 flux ($\mathregular{m^-2 eV^-1 s^-1})", size=20)
+        plt.ylabel("$\phi$ (m$^{-2}$ eV$^{-1}$ s$^{-1}$)", size=20)
         plt.show()
         
 
