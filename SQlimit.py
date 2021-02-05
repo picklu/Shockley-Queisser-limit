@@ -135,7 +135,7 @@ class SQlim(object):
         """
 
         if not self.Es[0] <= Eg <= self.Es[-1]:
-            print "invalid bandgap \nvalid range: 0.32 to 4.4"
+            print("invalid bandgap \nvalid range: 0.32 to 4.4")
             return
         V = np.arange(Vmin, Eg, Vstep)
         paras = self.get_paras(Eg, toPrint=False)
@@ -175,7 +175,7 @@ class SQlim(object):
         '''
 
         if not self.Es[0] <= Eg <= self.Es[-1]:
-            print "invalid bandgap \nvalid range: 0.32 to 4.4"
+            print("invalid bandgap \nvalid range: 0.32 to 4.4")
             return
         para = {}
         # could change these to binary search
@@ -186,13 +186,13 @@ class SQlim(object):
         para["J0"] = np.interp([Eg], self.Es, self.J0)[0]
 
         if toPrint:  # won't return anything; print in console instead
-            print
-            print "Bandgap: {0:.3f} eV \n".format(Eg)
-            print "J0 = {0:.3g} mA/cm^2".format(para["J0"])
-            print "Voc = {0:.4g} \t V".format(para["Voc"])
-            print "Jsc = {0:.4g} \t mA/cm^2".format(para["Jsc"])
-            print "FF  = {0:.2f} \t %".format(para["FF"])
-            print "PCE = {0:.3f} \t %".format(para["PCE"])
+            print()
+            print("Bandgap: {0:.3f} eV \n".format(Eg))
+            print("J0 = {0:.3g} mA/cm^2".format(para["J0"]))
+            print("Voc = {0:.4g} \t V".format(para["Voc"]))
+            print("Jsc = {0:.4g} \t mA/cm^2".format(para["Jsc"]))
+            print("FF  = {0:.2f} \t %".format(para["FF"]))
+            print("PCE = {0:.3f} \t %".format(para["PCE"]))
             return
 
         return para
@@ -220,8 +220,8 @@ class SQlim(object):
         """
 
         if para not in self.paras:
-            print "Invalid input! Valid inputs are:"
-            print '"Voc", "Jsc", "FF", "PCE", and "J0"'
+            print("Invalid input! Valid inputs are:")
+            print('"Voc", "Jsc", "FF", "PCE", and "J0"')
             return
         yunits = {"Voc": "(V)", "Jsc": "(mA/$\mathregular{cm^2}$)",
                   "FF": "(%)", "J0": "(mA/$\mathregular{cm^2}$)",
@@ -273,7 +273,7 @@ class SQlim(object):
         """
 
         if Eg > 4.2 or Eg < 0.32:
-            print "invalid bandgap \nvalid range: 0.32 to 4.2"
+            print("invalid bandgap \nvalid range: 0.32 to 4.2")
             return None
 
         xmax = max(xmax, 1240.0 / Eg)
@@ -289,7 +289,7 @@ class SQlim(object):
 
         mask = (1240.0/WLs) >= Eg
 
-        para = SQ.get_paras(Eg, toPrint=False)
+        para = self.get_paras(Eg, toPrint=False)
         factor = para["Voc"] * para["FF"] / 100.0 / Eg
         extract = AM15nm / (1240.0/WLs) * Eg * mask
         Eavail = extract * factor
@@ -326,7 +326,7 @@ class SQlim(object):
 
         ax.plot([Eg], [0])
         ax.legend(legends, labels, frameon=False, title=legendtitle,
-                  fontsize=14, loc="upper right").draggable()
+                  fontsize=14, loc="upper right").set_draggable(True)
         ax.get_legend().get_title().set_fontsize(14)
 
         ax.set_xlim(xmin, xmax)
@@ -379,7 +379,7 @@ class SQlim(object):
             numEg, Egs = 1, [Egs]
         EgMax, Egmin = max(Egs), min(Egs)
         if EgMax > 4.2 or Egmin < 0.32:
-            print "invalid bandgap \nvalid range: 0.32 to 4.2 eV"
+            print("invalid bandgap \nvalid range: 0.32 to 4.2 eV")
             return None
         xmax = max(xmax, 1240.0 / Egmin)
         xmin = min(xmin, 1240.0 / EgMax)
@@ -399,7 +399,7 @@ class SQlim(object):
         E_subcell["Solar"] = AM15nm
         PCEsubcell, tot_E = [], 1000.0
 
-        Jscs = [SQ.get_paras(E, toPrint=False)["Jsc"] for E in Egs[:-1]]
+        Jscs = [self.get_paras(E, toPrint=False)["Jsc"] for E in Egs[:-1]]
         Jscs.append(0.0)
 
         if with_sns:
@@ -408,7 +408,7 @@ class SQlim(object):
             cm = plt.get_cmap('gist_rainbow')  # gist_rainbow
             cNorm = pltcolors.Normalize(0, 1.2 * (numEg-1))
             scalarMap = pltcm.ScalarMappable(norm=cNorm, cmap=cm)
-            colors = [scalarMap.to_rgba(i) for i in xrange(numEg)]
+            colors = [scalarMap.to_rgba(i) for i in range(numEg)]
 
         for n, Eg in enumerate(Egs[:-1]):
             color = colors[n]
@@ -444,7 +444,7 @@ class SQlim(object):
                           for i in range(numEg - 1, -1, -1)]
 
             ax.legend(legends, labels, frameon=False, loc="upper right",
-                      fontsize=14).draggable()
+                      fontsize=14).set_draggable(True)
 
         if numEg != 1 and legend_totE:
             totE = np.nansum(PCEsubcell)  # small slice would have nan PCE
@@ -473,7 +473,7 @@ class SQlim(object):
         plt.figure()
         parameters = {"PCE", "Jsc", "FF", "Voc", "J0"}
         if attr not in parameters:
-            print "Invalid attribute"
+            print("Invalid attribute")
             return
         SQs = [SQlim(T=temp) for temp in sorted(T)]
         for SQ in SQs:
@@ -490,7 +490,7 @@ class SQlim(object):
         plt.figure()
         parameters = {"PCE", "Jsc", "FF", "Voc", "J0"}
         if attr not in parameters:
-            print "Invalid attribute"
+            print("Invalid attribute")
             return
         SQs = [SQlim(EQE_EL=EQE) for EQE in sorted(EQE_EL, reverse=True)]
         for SQ in SQs:
@@ -509,7 +509,7 @@ class SQlim(object):
         plt.figure()
         parameters = {"PCE", "Jsc", "FF", "Voc", "J0"}
         if attr not in parameters:
-            print "Invalid attribute"
+            print("Invalid attribute")
             return
         SQs = [SQlim(intensity=sun) for sun in sorted(Suns, reverse=True)]
         for SQ in SQs:
@@ -553,6 +553,9 @@ class SQlim(object):
         df["Jsc (mA/cm2)"] = [P[i] - P[i-1] for i in xrange(1, len(P))]
 
         return df
+    
+    def show(self):
+        plt.show()
 
     # Todo:
     # def PlotElossAll(self, xlims=(0.32, 3.0)):
