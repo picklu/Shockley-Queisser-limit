@@ -164,6 +164,8 @@ class SQlim(object):
             plt.tick_params(labelsize=16)
             plt.title(title)
             plt.tight_layout()
+            
+            plt.show()
 
         return np.vstack([V, J])  # col1: V, col2:J, photocurrent only
 
@@ -239,8 +241,6 @@ class SQlim(object):
         plt.tight_layout()
         plt.show()
 
-        return
-
     def plotall(self, xlims=(0.32, 3.0)):
         """
         plot Voc, Jsc, FF, and PCE in a figure with 4 subplots
@@ -260,7 +260,23 @@ class SQlim(object):
         ax[(0, 0)].set_xlim(xlims)
         plt.tight_layout()
         plt.show()
-        return
+    
+    def barchart(self, xlims=(0.32, 3.0)):
+        """
+        bar chart solar spectra 
+        """
+        """
+        plot Voc, Jsc, FF, and PCE in a figure with 4 subplots
+        """
+        para = "Spectral Irradiance"
+        plt.figure(para)
+        ax = plt.gca()
+        ax.plot(self.WLs, self.AM15nm, color="cyan")
+        ax.set_ylabel(para, size=20)
+        ax.set_xlim(xlims)
+        ax.set_xlabel("Bandgap (eV)", size=20)
+        plt.tight_layout()
+        plt.show()
 
     def E_loss(self, Eg, xmin=300, xmax=2500, savefig=False):
         """
@@ -345,8 +361,9 @@ class SQlim(object):
         losses["Extraction Loss"] = extractloss
         losses["Not Absorbed"] = transloss
         losses["Available"] = Eavail
-
-        return losses
+        plt.show()
+        
+#         return losses
 
     def available_E(self, Egs, E_MPP=True, xmin=300, xmax=2500,
                     savefig=False, legend=True, legend_totE=True):
@@ -464,7 +481,7 @@ class SQlim(object):
             plt.savefig(fname + ".pdf", transparent=True)
         plt.show()
 
-        return E_subcell, PCEsubcell
+#         return E_subcell, PCEsubcell
 
     # some classmethods for calculating and ploting various conditions
     @classmethod
@@ -553,9 +570,6 @@ class SQlim(object):
         df["Jsc (mA/cm2)"] = [P[i] - P[i-1] for i in xrange(1, len(P))]
 
         return df
-    
-    def show(self):
-        plt.show()
 
     # Todo:
     # def PlotElossAll(self, xlims=(0.32, 3.0)):
